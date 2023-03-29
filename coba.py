@@ -1,25 +1,26 @@
-cap = cv2.VideoCapture(0)
+import cv2 as cv
 
+cap = cv.VideoCapture("1.mp4")
 
-face_cascade = cv2.CascadeClassifier('apple.xml')
-
-
-while(True):
-    # Capture frame-by-frame
+while True:
     ret, frame = cap.read()
-
-    # Our operations on the frame come here
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-    
-    for (x,y,w,h) in faces:
-         cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
-         
-
-    cv2.imshow('frame',frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if not ret:
         break
 
-# When everything done, release the capture
+    roi = frame[200:352,300:640]
+    roi2 = frame[0:200,450:530]
+    
+    # Resize the input matrices to have the same dimensions
+    roi_resized = cv.resize(roi, (roi2.shape[1], roi2.shape[0]))
+    
+    # Combine the input matrices horizontally
+    combined_frame = cv.hconcat([roi_resized, roi2])
+
+    # Display the combined frame
+    cv.imshow('Combined Frame', combined_frame)
+    if cv.waitKey(1) == ord('q'):
+        break
+
+# Release the video object and close any open windows
 cap.release()
-cv2.destroyAllWindows()
+cv.destroyAllWindows()
