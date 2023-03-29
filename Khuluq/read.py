@@ -3,7 +3,7 @@ from tracker import *
 import numpy as np
 
 kernel = np.ones((5,5),np.uint8)
-cap = cv.VideoCapture("khuluq/1.mp4", cv.IMREAD_GRAYSCALE)
+cap = cv.VideoCapture("malam.mp4", cv.IMREAD_GRAYSCALE)
 a = 0
 object_detector = cv.createBackgroundSubtractorMOG2(history=100, varThreshold=60,detectShadows=False)
 
@@ -18,6 +18,7 @@ while True:
 
     gray = cv.cvtColor(roi, cv.COLOR_BGR2GRAY)
     
+    adjust = cv.convertScaleAbs(frame, alpha=0, beta=10)
     mask = object_detector.apply(roi)
     erosion = cv.erode(mask,kernel,iterations = 1)
     dilation = cv.erode(erosion,kernel,iterations = 8)
@@ -29,7 +30,7 @@ while True:
         area = cv.contourArea(cnt)
         # print(hie)
         #print(area)
-        if area > 800 and area < 1500:
+        if area > 800 and area < 1400:
             # print(area)
             a += 1
             x, y, w, h = cv.boundingRect(cnt)
@@ -42,22 +43,22 @@ while True:
             cv.rectangle(roi,(x,y),(x+w , y+h),(0,255,0),3)
 
             detections.append([x, y, w, h])
-    
-        # 2. Object Tracking
-    boxes_ids = tracker.update(detections)
-    for box_id in boxes_ids:
-        x, y, w, h, id = box_id
-        print("ini id : " , id)
-        print(x)
-        print(w)
-        cv.putText(roi,str(area), (x, y - 15), cv.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 2)
-        cv.rectangle(roi, (x, y), (x + w, y + h), (0, 255, 0), 3)
+            # 2. Object Tracking
+            boxes_ids = tracker.update(detections)
+            for box_id in boxes_ids:
+                x, y, w, h, id = box_id
+                print("ini id : " , id)
+                print(x)
+                print(w)
+                cv.putText(roi,str(area), (x, y - 15), cv.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 2)
+                cv.rectangle(roi, (x, y), (x + w, y + h), (0, 255, 0), 3)
 
-    cv.imshow("roi", roi)
+    # cv.imshow("roi", roi)
     cv.imshow("frame", frame)
-    cv.imshow("mask",mask)
-    cv.imshow("erosion", erosion)
-    cv.imshow("dilation", erosion)
+    # cv.imshow("mask",mask)
+    # cv.imshow("erosion", erosion)
+    # cv.imshow("dilation", erosion)
+    cv.imshow("adjust", adjust)
 
     if cv.waitKey(2) & 0xff == ord('q'):
         break
