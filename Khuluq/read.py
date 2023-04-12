@@ -3,7 +3,7 @@ from tracker import *
 import numpy as np
 
 kernel = np.ones((5,5),np.uint8)
-cap = cv.VideoCapture("malam.mp4", cv.IMREAD_GRAYSCALE)
+cap = cv.VideoCapture("1.mp4", cv.IMREAD_GRAYSCALE)
 a = 0
 object_detector = cv.createBackgroundSubtractorMOG2(history=100, varThreshold=60,detectShadows=False)
 
