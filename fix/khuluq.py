@@ -27,7 +27,7 @@ while True:
             if h/w > 1.45:
                 a += 1
                 cv.rectangle(roi,(x,y),(x+w , y+h),(0,255,0),3)
-                cv.imwrite('dataset-tes/'+str(a)+'.jpg',gray[y:y+h,x:x+w])
+                cv.imwrite('dataset-non-gray/'+str(a)+'.jpg',roi[y:y+h,x:x+w])
                 print(f"x:{x} y:{y} w:{w} h:{h}")
             # hitung jumlah motor
     cv.imshow("video",frame)
