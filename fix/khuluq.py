@@ -15,8 +15,7 @@ while True:
     gousian = cv.GaussianBlur(median,(41,41),0)
     
     mask = object_detector.apply(gousian)
-    #erosion = cv.erode(mask,(5,5),iterations = 5)
-    dilation = cv.erode(gousian,(5,5),iterations= 50)
+
     
     contours,_ = cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     
@@ -28,7 +27,7 @@ while True:
             if h/w > 1.45:
                 a += 1
                 cv.rectangle(roi,(x,y),(x+w , y+h),(0,255,0),3)
-                cv.imwrite('datasetfix/'+str(a)+'.jpg',gray[y:y+h,x:x+w])
+                cv.imwrite('dataset-tes/'+str(a)+'.jpg',gray[y:y+h,x:x+w])
                 print(f"x:{x} y:{y} w:{w} h:{h}")
             # hitung jumlah motor
     cv.imshow("video",frame)
